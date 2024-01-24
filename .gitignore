@@ -1,0 +1,14 @@
+finalFigures/*
+results/known/amp.txt
+results/known/delay.txt
+results/known/freq.txt
+results/known/obs.txt
+results/known/pair.txt
+results/known/recspeed.txt
+results/unknown/amp.txt
+results/unknown/delay.txt
+results/unknown/freq.txt
+results/unknown/obs.txt
+results/unknown/pair.txt
+results/unknown/recspeed.txt
+finalFigures/pair.csv

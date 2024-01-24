@@ -76,7 +76,7 @@ addAggregate <- function(data,...){
     mutate(mean_ = mean(deviation, na.rm = T), sd_ = sd(deviation, na.rm=T),
            diff = deviation - mean_, n = sum(!is.na(deviation)),
            LV = log( sum(diff^2, na.rm = T) / (n-1) ),
-           S = ( n / ((n-1)*(n-2)) ) * abs(sum( (diff / sd_)^3, na.rm = T)) ,
+           S = ( n / ((n-1)*(n-2)) ) * sum( (diff / sd_)^3, na.rm = T ) ,
            AC1 = sum(diff * (lead(deviation) - mean_), na.rm = T) / 
              sum(diff^2, na.rm = T),
            MS = mean(deviation**2,na.rm = T)) %>% 
@@ -362,12 +362,13 @@ runCase <- function(treps = 20, coef, sigmaRes = 0.1,
   sresult <- result2 %>% group_by(transformation, LINE) %>% 
     summarise(value = mean(value)) %>% ungroup()
   #### output ####
-  return(list(result2 = result2, data = data , nc = nc, grps=grps))
+  return(list(result2 = result2, data = data , nc = nc, grps=grps, method = method, coef = coef))
 }
 
 #' calculates the AUROC values for each group in a simulated scenario
 PairwiseComparison <- function(finalResult,out, reps){
   data = out$data; result2 = out$result2 ; nc = out$nc; grps = out$grps
+  method = out$method; coef = out$coef
   # who is more resilient than who (ranking)
   ranks <- list(resilient = 5, compensatory = 3, steady = 3,
               relapsed = 3, unrecovered = 1)
@@ -384,10 +385,18 @@ PairwiseComparison <- function(finalResult,out, reps){
       
       case <- temp %>% filter(y[1] == LINE) %>% pull(value)
       cont <- temp %>% filter(y[2] == LINE) %>% pull(value)
-      # should wish to use Poppe def for S uncomment line below
-      if (tr %in% c('S','AC1')){case <- abs(case) ; cont <- abs(cont)} # this one
+      if (tr %in% c('AC1')){case <- abs(case) ; cont <- abs(cont)} 
+      dirc = ifelse(ranks[[y[1]]] > ranks[[y[2]]], '>', '<') # normal direction
+      # for skewness
+      if (tr %in% c("S")) {
+         if (!any(is.na(coef)) && method == 3) {# if we are in method3 for trended data
+            dirc = ifelse(ranks[[y[1]]] > ranks[[y[2]]], '<', '>') # reverse the direction
+            # but use the values as it is
+         } else {  # use as before 
+            case <- abs(case) ; cont <- abs(cont)  # but use absolute values for comparison
+         }
+      }
       # roc assumes "control" {direction} "case"
-      dirc = ifelse(ranks[[y[1]]] > ranks[[y[2]]], '>', '<')
       #if (tr == 'Int'){ # but reverse for Int (removed)
       #  dirc = ifelse(ranks[[y[1]]] > ranks[[y[2]]], '<', '>')
       #}
