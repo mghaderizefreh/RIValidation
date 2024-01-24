@@ -15,5 +15,7 @@ and run in cluster
 where `<NL>` is the number of lines in input file `<fileName>`
 
 # plots
-for getting the plots, concatenate similar files (remove redundant headers) and run the file plots.R. The data used for the paper are compressed and put in the folder results.
+for getting the plots, concatenate similar files (remove redundant headers) and run the file `plots.R`. The data used for the paper are compressed and put in the folder results.
 
+# tables
+Table 2 and 3 can be reproduced from the uploaded datasets in this repo. Run `RocTables.R`
