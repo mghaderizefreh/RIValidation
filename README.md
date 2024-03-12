@@ -7,7 +7,7 @@ fittingMethod is 1: QR, 2:RR, 3:AVF but if function is 1 this input ignored (not
 and repNumber is any positive integer
 
 # Plots
-For getting the plots, concatenate similar files (for a specific <function>, <study> and <fittingMethod>) and remove redundant headers. Then run the file `plots.R`. The data used for the paper are compressed and put in the folder results.
+For getting the plots, concatenate similar files (for a specific `<function>`, `<study>` and `<fittingMethod>`) and remove redundant headers. Then run the file `plots.R`. The data used for the paper are compressed and put in the folder results.
 
 # Tables
 Table 2 and 3 can be reproduced from the uploaded datasets in this repo. Run `RocTables.R`
