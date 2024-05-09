@@ -76,7 +76,7 @@ addAggregate <- function(data,...){
     mutate(mean_ = mean(deviation, na.rm = T), sd_ = sd(deviation, na.rm=T),
            diff = deviation - mean_, n = sum(!is.na(deviation)),
            LV = log( sum(diff^2, na.rm = T) / (n-1) ),
-           S = ( n / ((n-1)*(n-2)) ) * sum( (diff / sd_)^3, na.rm = T ) ,
+           S = abs(( n / ((n-1)*(n-2)) ) * sum( (diff / sd_)^3, na.rm = T ) ),
            AC1 = sum(diff * (lead(deviation) - mean_), na.rm = T) / 
              sum(diff^2, na.rm = T),
            MS = mean(deviation**2,na.rm = T)) %>% 
